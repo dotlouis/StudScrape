@@ -58,6 +58,12 @@ page.open(BASEURL+CATEGORY.TRAINEE, function(status) {
                 return parseInt(str.substring(str.indexOf('(')+1, str.indexOf(',')));
             };
 
+            // determine if the given node is a branch or an item based on
+            // javascript function name
+            isBranch = function(str){
+                return ((str.indexOf('Branch') == -1)? false:true);
+            };
+
             // we list all the branches and items on the page
             var branchList = document.querySelectorAll('.treeline .treebranch a, .treeline .treeitem a');
 
@@ -69,6 +75,7 @@ page.open(BASEURL+CATEGORY.TRAINEE, function(status) {
             // we play on index (start and end variables) to do this
             for(var i=start; i<end; i++)
                 subTreeInside.push({
+                    branch: isBranch(branchList[i].getAttribute('href')),
                     label: branchList[i].innerText,
                     resource: extractResourceNumber(branchList[i].getAttribute('href'))
                 });
@@ -110,6 +117,6 @@ page.open(BASEURL+CATEGORY.TRAINEE, function(status) {
 
 function debugTree(tree){
     for(var i=0; i<tree.length; i++){
-        console.log("["+tree[i].resource+"]  "+tree[i].label+" ("+i+")");
+        console.log(((tree[i].branch)? "+":" ")+" ["+tree[i].resource+"]  "+tree[i].label+" ("+i+")");
     }
 }
